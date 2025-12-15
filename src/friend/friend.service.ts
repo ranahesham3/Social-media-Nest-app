@@ -15,6 +15,7 @@ import { FriendRequestStatus } from 'src/_cors/types/FriendReqStatus';
 import { plainToInstance } from 'class-transformer';
 import { ResponseFriendRequestDto } from './dto/response-request-friend.dto';
 import { FriendGateway } from './friend.gateway';
+import { ResponseFriendDto } from './dto/response-friend.dto';
 
 @Injectable()
 export class FriendService {
@@ -97,7 +98,7 @@ export class FriendService {
   }
 
   async acceptFriendRequest(userId: number, id: number) {
-    const friendReq = await this.findOne(id);
+    let friendReq = await this.findOne(id);
 
     if (userId !== friendReq.receiver.id) throw new ForbiddenException();
 
@@ -105,7 +106,16 @@ export class FriendService {
       throw new BadRequestException('request already handeled');
 
     friendReq.status = FriendRequestStatus.ACCEPTED;
-    return await this.friendRepository.save(friendReq);
+    friendReq = await this.friendRepository.save(friendReq);
+
+    const response = plainToInstance(ResponseFriendDto, friendReq.receiver, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true,
+    });
+    this.friendGateway.handleAcceptedFriendRequest(
+      friendReq.sender.id.toString(),
+      response,
+    );
   }
 
   async rejectFriendRequest(userId: number, id: number) {
