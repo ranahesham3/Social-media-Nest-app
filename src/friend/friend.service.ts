@@ -127,7 +127,12 @@ export class FriendService {
       throw new BadRequestException('request already handeled');
 
     friendReq.status = FriendRequestStatus.REJECTED;
-    return await this.friendRepository.save(friendReq);
+    await this.friendRepository.save(friendReq);
+
+    this.friendGateway.handleRejectedFriendRequest(
+      friendReq.sender.id.toString(),
+      id.toString(),
+    );
   }
 
   async getCurrentReqPending(senderId: number) {

@@ -39,4 +39,8 @@ export class FriendGateway {
   ) {
     this.server.to(senderId).emit('accepted-friend-request', friendRequest);
   }
+
+  handleRejectedFriendRequest(senderId: string, friendRequestId: string) {
+    this.server.to(senderId).emit('rejected-friend-request', friendRequestId);
+  }
 }
