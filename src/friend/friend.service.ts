@@ -94,7 +94,12 @@ export class FriendService {
     }
     previousReq.status = FriendRequestStatus.REJECTED;
 
-    return await this.friendRepository.save(previousReq);
+    await this.friendRepository.save(previousReq);
+
+    this.friendGateway.handleCanceledFriendRequest(
+      receiverId.toString(),
+      previousReq.id.toString(),
+    );
   }
 
   async acceptFriendRequest(userId: number, id: number) {
