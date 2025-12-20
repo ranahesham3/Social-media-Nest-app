@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  DefaultValuePipe,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -23,8 +26,13 @@ export class NotificationController {
   @Get()
   @UseGuards(AuthGuard)
   @TransformDTO(ResponseNotificationDto)
-  findAll(@CurrentUser() user: JwtType) {
-    return this.notificationService.findAll(user.id);
+  findAll(
+    @CurrentUser() user: JwtType,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
+    pageNumber: number,
+  ) {
+    return this.notificationService.findAll(user.id, limit, pageNumber);
   }
 
   @Patch(':id')

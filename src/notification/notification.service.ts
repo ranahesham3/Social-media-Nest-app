@@ -37,11 +37,16 @@ export class NotificationService {
     //TODO: Real Time
   }
 
-  findAll(currentUserId: number) {
+  findAll(currentUserId: number, limit: number, pageNumber: number) {
+    const skip = (pageNumber - 1) * limit;
+
     return this.notificationRepository.find({
       where: {
         receiver: { id: currentUserId },
       },
+      order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
   }
 
