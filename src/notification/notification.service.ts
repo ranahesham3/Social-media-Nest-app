@@ -1,11 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { NotificationType } from 'src/_cors/types/NotificationType';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Notification } from './entities/notification.entity';
+import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class NotificationService {
-  create(createNotificationDto: CreateNotificationDto) {
-    return 'This action adds a new notification';
+  constructor(
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>,
+    private readonly userService: UserService,
+  ) {}
+
+  async create(
+    senderId: number,
+    recieverId: number,
+    type: NotificationType,
+    content: string,
+    targetId?: number,
+  ) {
+    const sender = await this.userService.findOne(senderId);
+    const receiver = await this.userService.findOne(recieverId);
+
+    let notification = this.notificationRepository.create({
+      sender,
+      receiver,
+      type,
+      content,
+      targetId,
+    });
+
+    notification = await this.notificationRepository.save(notification);
+
+    //TODO: Real Time
   }
 
   findAll() {

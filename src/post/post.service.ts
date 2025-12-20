@@ -19,6 +19,8 @@ import { Reaction } from 'src/reaction/entities/reaction.entity';
 import { PostGateway } from './post.gateway';
 import { ResponsePostDto } from './dto/response-post.dto';
 import { plainToInstance } from 'class-transformer';
+import { NotificationService } from 'src/notification/notification.service';
+import { NotificationType } from 'src/_cors/types/NotificationType';
 
 @Injectable()
 export class PostService {
@@ -26,6 +28,7 @@ export class PostService {
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly reactionService: ReactionService,
+    private readonly notificationService: NotificationService,
     private readonly postGateway: PostGateway,
   ) {}
 
@@ -202,6 +205,15 @@ export class PostService {
     });
 
     this.postGateway.handleAddReaction(responsePost);
+
+    const notificationContent = `${user.name ?? 'User'} has added ${reactionType} reaction to your post`;
+    await this.notificationService.create(
+      userId,
+      post.author.id,
+      NotificationType.REACTION,
+      notificationContent,
+      post.id,
+    );
   }
 
   async removeReaction(id: number, userId: number) {
