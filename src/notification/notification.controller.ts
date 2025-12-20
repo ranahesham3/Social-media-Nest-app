@@ -6,18 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
-import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { AuthGuard } from 'src/_cors/guards/auth.guard';
+import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cors/types/JwtType';
+import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { ResponseNotificationDto } from './dto/response-notification.dto';
 
-@Controller('notification')
+@Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Get()
-  findAll() {
-    return this.notificationService.findAll();
+  @UseGuards(AuthGuard)
+  @TransformDTO(ResponseNotificationDto)
+  findAll(@CurrentUser() user: JwtType) {
+    return this.notificationService.findAll(user.id);
   }
 
   @Patch(':id')

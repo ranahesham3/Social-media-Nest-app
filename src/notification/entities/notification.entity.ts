@@ -24,7 +24,7 @@ export class Notification extends BaseEntity {
   content: string;
 
   @Column({ default: false })
-  isReed: boolean;
+  isRead: boolean;
 
   @Column({ nullable: true })
   targetId?: number;

@@ -37,8 +37,12 @@ export class NotificationService {
     //TODO: Real Time
   }
 
-  findAll() {
-    return `This action returns all notification`;
+  findAll(currentUserId: number) {
+    return this.notificationRepository.find({
+      where: {
+        receiver: { id: currentUserId },
+      },
+    });
   }
 
   findOne(id: number) {
