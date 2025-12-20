@@ -22,6 +22,8 @@ import { ConversationModule } from './conversation/conversation.module';
 import { MessageModule } from './message/message.module';
 import { Conversation } from './conversation/entities/conversation.entity';
 import { Message } from './message/entities/message.entity';
+import { NotificationModule } from './notification/notification.module';
+import { Notification } from './notification/entities/notification.entity';
 
 @Module({
   imports: [
@@ -44,6 +46,7 @@ import { Message } from './message/entities/message.entity';
         FriendRequest,
         Conversation,
         Message,
+        Notification,
       ],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
@@ -57,6 +60,7 @@ import { Message } from './message/entities/message.entity';
     FriendModule,
     ConversationModule,
     MessageModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
