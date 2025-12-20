@@ -23,8 +23,8 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 30, nullable: true })
-  name?: string;
+  @Column({ type: 'varchar', length: 30 })
+  name: string;
 
   @Column({ type: 'varchar', length: 250, unique: true })
   email: string;
