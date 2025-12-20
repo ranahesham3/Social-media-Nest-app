@@ -3,6 +3,7 @@ import { User } from 'src/user/entities/user.entity';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -39,4 +40,7 @@ export class Notification extends BaseEntity {
     onDelete: 'CASCADE',
   })
   receiver: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
