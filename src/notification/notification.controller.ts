@@ -1,18 +1,14 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   DefaultValuePipe,
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { AuthGuard } from 'src/_cors/guards/auth.guard';
 import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
 import type { JwtType } from 'src/_cors/types/JwtType';

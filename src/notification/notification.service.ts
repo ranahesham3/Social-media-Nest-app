@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NotificationType } from 'src/_cors/types/NotificationType';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
+import { plainToInstance } from 'class-transformer';
+import { ResponseNotificationDto } from './dto/response-notification.dto';
+import { NotificationGateway } from './notification.gateway';
 
 @Injectable()
 export class NotificationService {
@@ -12,6 +14,7 @@ export class NotificationService {
     @InjectRepository(Notification)
     private readonly notificationRepository: Repository<Notification>,
     private readonly userService: UserService,
+    private readonly notificationGateway: NotificationGateway,
   ) {}
 
   async create(
@@ -34,7 +37,19 @@ export class NotificationService {
 
     notification = await this.notificationRepository.save(notification);
 
-    //TODO: Real Time
+    const responseNotification = plainToInstance(
+      ResponseNotificationDto,
+      notification,
+      {
+        excludeExtraneousValues: true,
+        enableImplicitConversion: true,
+      },
+    );
+
+    this.notificationGateway.handleNewNotification(
+      recieverId.toString(),
+      responseNotification,
+    );
   }
 
   async findAll(currentUserId: number, limit: number, pageNumber: number) {
