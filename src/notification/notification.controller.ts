@@ -20,11 +20,11 @@ import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
 import { ResponseNotificationDto } from './dto/response-notification.dto';
 
 @Controller('notifications')
+@UseGuards(AuthGuard)
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
   @TransformDTO(ResponseNotificationDto)
   findAll(
     @CurrentUser() user: JwtType,
@@ -35,11 +35,16 @@ export class NotificationController {
     return this.notificationService.findAll(user.id, limit, pageNumber);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateNotificationDto: UpdateNotificationDto,
+  @Patch(':id/read')
+  markAsRead(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: JwtType,
   ) {
-    return this.notificationService.update(+id, updateNotificationDto);
+    return this.notificationService.markOneNotificationAsRead(id, user.id);
+  }
+
+  @Patch('read-all')
+  markAllAsRead(@CurrentUser() user: JwtType) {
+    return this.notificationService.markAllNotificationsAsRead(user.id);
   }
 }

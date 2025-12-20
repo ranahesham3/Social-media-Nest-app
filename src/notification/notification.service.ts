@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NotificationType } from 'src/_cors/types/NotificationType';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,10 +37,12 @@ export class NotificationService {
     //TODO: Real Time
   }
 
-  findAll(currentUserId: number, limit: number, pageNumber: number) {
+  async findAll(currentUserId: number, limit: number, pageNumber: number) {
+    const receiver = await this.userService.findOne(currentUserId);
+
     const skip = (pageNumber - 1) * limit;
 
-    return this.notificationRepository.find({
+    return await this.notificationRepository.find({
       where: {
         receiver: { id: currentUserId },
       },
@@ -50,15 +52,40 @@ export class NotificationService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} notification`;
+  async markOneNotificationAsRead(id: number, currentUserId: number) {
+    const receiver = await this.userService.findOne(currentUserId);
+
+    const notification = await this.notificationRepository.findOneBy({
+      id,
+      receiver: { id: currentUserId },
+    });
+
+    if (!notification) throw new NotFoundException('Notification not found');
+
+    notification.isRead = true;
+    await this.notificationRepository.save(notification);
+
+    return {
+      message: 'Notification marked as read successfully!',
+    };
   }
 
-  update(id: number, updateNotificationDto: UpdateNotificationDto) {
-    return `This action updates a #${id} notification`;
-  }
+  async markAllNotificationsAsRead(currentUserId: number) {
+    const receiver = await this.userService.findOne(currentUserId);
 
-  remove(id: number) {
-    return `This action removes a #${id} notification`;
+    const notifications = await this.notificationRepository.find({
+      where: {
+        receiver: { id: currentUserId },
+        isRead: false,
+      },
+      order: { createdAt: 'DESC' },
+    });
+    notifications.forEach((n) => (n.isRead = true));
+
+    await this.notificationRepository.save(notifications);
+
+    return {
+      message: 'Notifications marked as read successfully!',
+    };
   }
 }
