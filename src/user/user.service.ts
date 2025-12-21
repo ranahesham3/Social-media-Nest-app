@@ -5,11 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UploadMediaDto } from 'src/_cors/dtos/upload-media.dto';
+import { FriendService } from 'src/friend/friend.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly friendService: FriendService,
   ) {}
 
   async getCurrentUser(id: number) {
@@ -18,7 +20,16 @@ export class UserService {
     return user;
   }
 
-  async findAll(q: string, limit: number, cursor: number) {
+  async findAll(
+    currentUserId: number,
+    q: string,
+    limit: number,
+    cursor: number,
+  ) {
+    const userFriends =
+      await this.friendService.getCurrentFriends(currentUserId);
+    const userFriendIds = userFriends.map((fr) => fr.id);
+
     const db = this.userRepository
       .createQueryBuilder('user')
       .where('user.isActive=true')
@@ -27,7 +38,12 @@ export class UserService {
       db.andWhere(`user.name ILIKE :q OR user.email ILIKE :q`, { q: `%${q}%` });
     }
     db.skip((cursor - 1) * limit).take(limit);
-    return await db.getMany();
+    const users = await db.getMany();
+
+    return users.map((u) => ({
+      ...u,
+      isFriend: userFriendIds.includes(u.id),
+    }));
   }
 
   async findByIds(userIds: number[]) {

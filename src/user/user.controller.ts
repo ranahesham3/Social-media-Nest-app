@@ -55,15 +55,15 @@ export class UserController {
   }
 
   @Get('')
-  @Roles(UserType.ADMIN)
-  @UseGuards(RoleGuard)
+  @UseGuards(AuthGuard)
   @TransformDTO(ResponseUserDto)
   async getAllUser(
+    @CurrentUser() user: JwtType,
     @Query('q') q: string,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
     @Query('cursor', new DefaultValuePipe(1), ParseIntPipe) cursor: number,
   ) {
-    return await this.userService.findAll(q, limit, cursor);
+    return await this.userService.findAll(user.id, q, limit, cursor);
   }
 
   @Roles(UserType.NORMAL_USER, UserType.ADMIN)

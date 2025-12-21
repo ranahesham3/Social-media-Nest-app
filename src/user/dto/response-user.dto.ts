@@ -53,4 +53,8 @@ export class ResponseUserDto {
   @Expose()
   @IsBoolean()
   isActive: boolean;
+
+  @Expose()
+  @IsBoolean()
+  isFriend: boolean;
 }
