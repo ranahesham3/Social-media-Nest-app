@@ -7,12 +7,14 @@ import { User } from 'src/user/entities/user.entity';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { ReactionModule } from 'src/reaction/reaction.module';
 import { PostGateway } from './post.gateway';
+import { FriendModule } from 'src/friend/friend.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Post, User]),
     CloudinaryModule,
     ReactionModule,
+    FriendModule,
   ],
   controllers: [PostController],
   providers: [PostService, PostGateway],

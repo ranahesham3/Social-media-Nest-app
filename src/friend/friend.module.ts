@@ -10,5 +10,6 @@ import { FriendGateway } from './friend.gateway';
   imports: [TypeOrmModule.forFeature([FriendRequest]), UserModule],
   controllers: [FriendController],
   providers: [FriendService, FriendGateway],
+  exports: [FriendService],
 })
 export class FriendModule {}

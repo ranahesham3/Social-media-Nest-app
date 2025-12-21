@@ -7,7 +7,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Or, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { UploadMediaDto } from '../_cors/dtos/upload-media.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
@@ -21,6 +21,8 @@ import { ResponsePostDto } from './dto/response-post.dto';
 import { plainToInstance } from 'class-transformer';
 import { NotificationService } from 'src/notification/notification.service';
 import { NotificationType } from 'src/_cors/types/NotificationType';
+import { PrivacyType } from 'src/_cors/types/PrivacyType';
+import { FriendService } from 'src/friend/friend.service';
 
 @Injectable()
 export class PostService {
@@ -30,6 +32,7 @@ export class PostService {
     private readonly reactionService: ReactionService,
     private readonly notificationService: NotificationService,
     private readonly postGateway: PostGateway,
+    private readonly friendService: FriendService,
   ) {}
 
   async create(createPostDto: CreatePostDto, authorId: number) {
@@ -60,12 +63,27 @@ export class PostService {
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!user) throw new UnauthorizedException('Try to login again');
 
+    const friendsOfAuthor = await this.friendService.getCurrentFriends(userId);
+    const friendsOfAuthorIds = friendsOfAuthor.map((fr) => fr.id);
+
     const skip = (pageNumber - 1) * limit;
     const posts = await this.postRepository.find({
-      where: {
-        author: { id: userId },
-        ...(cursor ? { createdAt: LessThan(new Date(cursor)) } : {}),
-      },
+      where: [
+        {
+          ...(cursor ? { createdAt: LessThan(new Date(cursor)) } : {}),
+          privacy: PrivacyType.PUBLIC,
+        },
+        {
+          ...(cursor ? { createdAt: LessThan(new Date(cursor)) } : {}),
+          privacy: PrivacyType.FRIENDS,
+          author: { id: In(friendsOfAuthorIds) },
+        },
+        {
+          ...(cursor ? { createdAt: LessThan(new Date(cursor)) } : {}),
+          privacy: PrivacyType.PRIVATE,
+          author: { id: userId },
+        },
+      ],
       order: { createdAt: 'DESC' },
       skip,
       take: limit,
