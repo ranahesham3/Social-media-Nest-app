@@ -127,6 +127,7 @@ export class FriendService {
     this.friendGateway.handleAcceptedFriendRequest(
       friendReq.sender.id.toString(),
       response,
+      userId.toString(),
     );
   }
 
@@ -144,6 +145,7 @@ export class FriendService {
     this.friendGateway.handleRejectedFriendRequest(
       friendReq.sender.id.toString(),
       id.toString(),
+      userId.toString(),
     );
   }
 
