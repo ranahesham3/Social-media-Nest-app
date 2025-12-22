@@ -63,6 +63,16 @@ export class FriendController {
     return await this.friendService.rejectFriendRequest(payload.id, id);
   }
 
+  @HttpCode(200)
+  @Get('unfriend/:friendId')
+  @UseGuards(AuthGuard)
+  async unfriend(
+    @CurrentUser() payload: JwtType,
+    @Param('friendId', ParseIntPipe) friendId: number,
+  ) {
+    return await this.friendService.rejectFriendRequest(payload.id, friendId);
+  }
+
   @Get('pending-requests')
   @UseGuards(AuthGuard)
   async getCurrentReqestsPending(@CurrentUser() payload: JwtType) {

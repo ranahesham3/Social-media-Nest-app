@@ -149,6 +149,30 @@ export class FriendService {
     );
   }
 
+  async unFriend(currentUserId: number, friendId: number) {
+    const friendReq = await this.friendRepository.findOne({
+      where: [
+        {
+          sender: { id: friendId },
+          receiver: { id: currentUserId },
+        },
+        {
+          sender: { id: currentUserId },
+          receiver: { id: friendId },
+        },
+      ],
+    });
+
+    if (!friendReq || friendReq?.status !== FriendRequestStatus.ACCEPTED)
+      throw new BadRequestException(`You're not friends`);
+
+    await this.friendRepository.delete(friendReq.id);
+
+    return {
+      message: 'Friend removed successfully!',
+    };
+  }
+
   async getCurrentReqPending(senderId: number) {
     return await this.friendRepository.find({
       where: { sender: { id: senderId }, status: FriendRequestStatus.PENDING },
