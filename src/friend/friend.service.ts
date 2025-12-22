@@ -11,7 +11,7 @@ import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FriendRequest } from './entities/friend.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { FriendRequestStatus } from 'src/_cors/types/FriendReqStatus';
 import { plainToInstance } from 'class-transformer';
@@ -38,15 +38,19 @@ export class FriendService {
         'Can not send a friend request to yourself',
       );
     const previousReq = await this.friendRepository.findOne({
-      where: {
-        sender: { id: userId },
-        receiver: { id: receiverId },
-      },
+      where: [
+        {
+          sender: { id: userId },
+          receiver: { id: receiverId },
+        },
+        {
+          sender: { id: receiverId },
+          receiver: { id: userId },
+        },
+      ],
     });
     if (previousReq && previousReq?.status === FriendRequestStatus.PENDING) {
-      throw new BadRequestException(
-        'You are already sent a friend request to this user',
-      );
+      throw new BadRequestException('A friend request is already pending');
     } else if (
       previousReq &&
       previousReq?.status === FriendRequestStatus.ACCEPTED
