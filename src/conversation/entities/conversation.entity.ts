@@ -8,10 +8,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -51,4 +53,8 @@ export class Conversation extends BaseEntity {
 
   @OneToMany(() => Message, (message) => message.conversation)
   messages: Message[];
+
+  @OneToOne(() => Message, { nullable: true, eager: true })
+  @JoinColumn()
+  lastMessage: Message;
 }

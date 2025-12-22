@@ -83,10 +83,20 @@ export class ConversationService {
       )
       .leftJoinAndSelect('conversation.participants', 'participants')
       .leftJoinAndSelect('conversation.groupOwner', 'groupOwner')
+      .leftJoinAndSelect('conversation.lastMessage', 'lastMessage')
+      .leftJoinAndSelect('lastMessage.seenBy', 'seenBy')
       .orderBy('conversation.updatedAt', 'DESC')
       .getMany();
 
-    return conversations;
+    return conversations.map((c) => {
+      const seeByIds = c.lastMessage
+        ? c.lastMessage.seenBy.map((u) => u.id)
+        : [];
+      return {
+        ...c,
+        isLastMessageSeen: seeByIds.includes(userId),
+      };
+    });
   }
 
   async findOne(id: number, userId: number) {
@@ -104,6 +114,7 @@ export class ConversationService {
       .getOne();
 
     if (!conversation) throw new NotFoundException('Conversation not found');
+
     return conversation;
   }
 

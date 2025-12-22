@@ -46,6 +46,9 @@ export class MessageService {
 
     message = await this.messageReposirory.save(message);
 
+    conversation.lastMessage = message;
+    await conversation.save();
+
     //convert the saved message into ResponseMessageDto
     const responseMessage = plainToInstance(ResponseMessageDto, message, {
       excludeExtraneousValues: true,

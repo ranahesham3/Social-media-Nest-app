@@ -1,5 +1,5 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { IsEmail, IsNumber, IsString, Min } from 'class-validator';
+import { IsBoolean, IsEmail, IsNumber, IsString, Min } from 'class-validator';
 import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
 import { MediaType } from 'src/_cors/types/MediaType';
 import { Conversation } from '../entities/conversation.entity';
@@ -52,6 +52,18 @@ export class ResponseConversationDto {
   @Expose()
   @Type(() => MediaTypeDto)
   groupAvatar: MediaType;
+
+  @Expose()
+  @Transform(({ obj }: { obj: Conversation }) => obj.lastMessage.text)
+  lastMessage: string;
+
+  @Expose()
+  @Transform(({ obj }: { obj: Conversation }) => obj.lastMessage.sender.name)
+  lastMessageSender: string;
+
+  @Expose()
+  @IsBoolean()
+  isLastMessageSeen: boolean;
 
   @Expose()
   createdAt: Date;
