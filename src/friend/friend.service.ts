@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -22,6 +24,7 @@ export class FriendService {
   constructor(
     @InjectRepository(FriendRequest)
     private readonly friendRepository: Repository<FriendRequest>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly friendGateway: FriendGateway,
   ) {}
