@@ -4,4 +4,5 @@ export enum ReactionType {
   HAHA = 'haha',
   ANGRY = 'angry',
   WOW = 'wow',
+  SAD = 'sad',
 }

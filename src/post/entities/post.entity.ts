@@ -33,7 +33,7 @@ export class Post extends BaseEntity {
 
   @Column({
     type: 'jsonb',
-    default: () => `'{"love":0,"like":0,"haha":0,"angry":0,"wow":0}'`,
+    default: () => `'{"love":0,"like":0,"haha":0,"angry":0,"wow":0,"sad":0}'`,
   })
   reactionCounts: {
     love: number;
@@ -41,6 +41,7 @@ export class Post extends BaseEntity {
     haha: number;
     angry: number;
     wow: number;
+    sad: number;
   };
 
   @CreateDateColumn()

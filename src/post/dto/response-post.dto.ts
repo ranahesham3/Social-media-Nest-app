@@ -17,6 +17,7 @@ export class ResponsePostDto {
     haha: number;
     angry: number;
     wow: number;
+    sad: number;
   };
   @Expose()
   privacy: PrivacyType;
