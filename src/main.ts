@@ -6,8 +6,18 @@ import {
   VersioningType,
 } from '@nestjs/common';
 
+import helmet from 'helmet';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  //Apply helmet to add security headers
+  app.use(helmet());
+
+  //Cors policy
+  app.enableCors({
+    origin: `http://localhost:3001`,
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
