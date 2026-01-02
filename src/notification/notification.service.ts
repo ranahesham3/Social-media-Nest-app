@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { NotificationType } from 'src/_cors/types/NotificationType';
+import { NotificationType } from 'src/_cores/types/NotificationType';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
 import { Repository } from 'typeorm';
@@ -50,6 +50,10 @@ export class NotificationService {
       recieverId.toString(),
       responseNotification,
     );
+
+    return {
+      message: 'Notification created successfully!',
+    };
   }
 
   async findAll(currentUserId: number, limit: number, pageNumber: number) {
@@ -57,14 +61,23 @@ export class NotificationService {
 
     const skip = (pageNumber - 1) * limit;
 
-    return await this.notificationRepository.find({
+    const notifications = await this.notificationRepository.find({
       where: {
         receiver: { id: currentUserId },
       },
       order: { createdAt: 'DESC' },
       skip,
-      take: limit,
+      take: limit + 1,
     });
+
+    const hasNextPage = notifications.length > limit;
+    const items = hasNextPage ? notifications.slice(0, limit) : notifications;
+
+    return {
+      items,
+      hasNextPage,
+      pageNumber,
+    };
   }
 
   async markOneNotificationAsRead(id: number, currentUserId: number) {

@@ -1,5 +1,5 @@
-import { MediaType } from 'src/_cors/types/MediaType';
-import { ReactionType } from 'src/_cors/types/ReactionType';
+import { MediaType } from 'src/_cores/types/MediaType';
+import { ReactionType } from 'src/_cores/types/ReactionType';
 import { Message } from 'src/message/entities/message.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { User } from 'src/user/entities/user.entity';

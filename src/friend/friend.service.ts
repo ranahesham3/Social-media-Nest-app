@@ -5,15 +5,12 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { CreateFriendDto } from './dto/create-friend.dto';
-import { UpdateFriendDto } from './dto/update-friend.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FriendRequest } from './entities/friend.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
-import { FriendRequestStatus } from 'src/_cors/types/FriendReqStatus';
+import { FriendRequestStatus } from 'src/_cores/types/FriendReqStatus';
 import { plainToInstance } from 'class-transformer';
 import { ResponseFriendRequestDto } from './dto/response-request-friend.dto';
 import { FriendGateway } from './friend.gateway';
@@ -78,6 +75,10 @@ export class FriendService {
       friendRequest.receiver.id.toString(),
       response,
     );
+
+    return {
+      message: 'Friend request sent successfully!',
+    };
   }
 
   async cancelFriendReq(userId: number, receiverId: number) {
@@ -107,6 +108,10 @@ export class FriendService {
       receiverId.toString(),
       previousReq.id.toString(),
     );
+
+    return {
+      message: 'Friend request canceled successfully!',
+    };
   }
 
   async acceptFriendRequest(userId: number, id: number) {
@@ -129,6 +134,10 @@ export class FriendService {
       response,
       userId.toString(),
     );
+
+    return {
+      message: 'Friend request accepted successfully!',
+    };
   }
 
   async rejectFriendRequest(userId: number, id: number) {
@@ -147,6 +156,10 @@ export class FriendService {
       id.toString(),
       userId.toString(),
     );
+
+    return {
+      message: 'Friend request rejected successfully!',
+    };
   }
 
   async unFriend(currentUserId: number, friendId: number) {

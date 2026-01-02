@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { PrivacyType } from 'src/_cors/types/PrivacyType';
+import { PrivacyType } from 'src/_cores/types/PrivacyType';
 
 export class UpdatePostDto {
   @IsOptional()

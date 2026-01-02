@@ -1,8 +1,7 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsBoolean, IsEmail, IsNumber, IsString, Min } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
 import { Conversation } from '../entities/conversation.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export class ParticipantDto {
   @Expose()
@@ -18,8 +17,8 @@ export class ParticipantDto {
   email: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  avatar: MediaType;
+  @Transform(({ obj }: { obj: User }) => obj.avatar?.url)
+  avatar: string;
 }
 
 export class ResponseConversationDto {
@@ -49,9 +48,10 @@ export class ResponseConversationDto {
 
   @Expose()
   groupName: string;
+
   @Expose()
-  @Type(() => MediaTypeDto)
-  groupAvatar: MediaType;
+  @Transform(({ obj }: { obj: Conversation }) => obj.groupAvatar?.url)
+  groupAvatar: string;
 
   @Expose()
   @Transform(({ obj }: { obj: Conversation }) => obj.lastMessage.text)

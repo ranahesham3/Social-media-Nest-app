@@ -5,7 +5,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ResponsePostDto } from './dto/response-post.dto';
-import { UploadMediaDto } from 'src/_cors/dtos/upload-media.dto';
+import { UploadMediaDto } from 'src/_cores/dtos/upload-media.dto';
 import { DeleteMediaDto } from './dto/delete-media.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 

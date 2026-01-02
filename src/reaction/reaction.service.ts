@@ -37,13 +37,7 @@ export class ReactionService {
       user,
       post,
     });
-    const r = await this.reactioneRepository.save(reaction);
-    console.log(r);
-    return r;
-  }
-
-  findAll() {
-    return `This action returns all reaction`;
+    return await this.reactioneRepository.save(reaction);
   }
 
   async findOne(id: number) {

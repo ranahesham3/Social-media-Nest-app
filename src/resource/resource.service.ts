@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from 'src/_cors/types/ResourceType';
+import { ResourceType } from 'src/_cores/types/ResourceType';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Conversation } from 'src/conversation/entities/conversation.entity';
 import { Post } from 'src/post/entities/post.entity';

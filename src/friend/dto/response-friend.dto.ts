@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -9,9 +9,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
-import { UserType } from 'src/_cors/types/userType';
+import { User } from 'src/user/entities/user.entity';
 
 export class ResponseFriendDto {
   @Expose()
@@ -27,6 +25,6 @@ export class ResponseFriendDto {
   email: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  avatar?: MediaType;
+  @Transform(({ obj }: { obj: User }) => obj.avatar?.url)
+  avatar?: string;
 }

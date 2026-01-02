@@ -13,10 +13,10 @@ import {
 import { FriendService } from './friend.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseFriendDto } from './dto/response-friend.dto';
 
 @Controller('friends')

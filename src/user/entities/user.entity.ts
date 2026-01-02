@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { MediaType } from 'src/_cors/types/MediaType';
-import { UserType } from 'src/_cors/types/userType';
+import { MediaType } from 'src/_cores/types/MediaType';
+import { UserType } from 'src/_cores/types/userType';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Conversation } from 'src/conversation/entities/conversation.entity';
 import { FriendRequest } from 'src/friend/entities/friend.entity';

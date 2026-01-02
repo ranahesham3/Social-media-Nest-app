@@ -1,8 +1,7 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsBoolean, IsDate, IsNumber, IsString, Min } from 'class-validator';
 import { Notification } from '../entities/notification.entity';
-import { MediaType } from 'src/_cors/types/MediaType';
-import { NotificationType } from 'src/_cors/types/NotificationType';
+import { NotificationType } from 'src/_cores/types/NotificationType';
 
 export class ResponseNotificationDto {
   @Expose()
@@ -22,8 +21,8 @@ export class ResponseNotificationDto {
   senderName: number;
 
   @Expose()
-  @Transform(({ obj }: { obj: Notification }) => obj.sender.avatar)
-  senderAvatar: MediaType;
+  @Transform(({ obj }: { obj: Notification }) => obj.sender.avatar?.url)
+  senderAvatar: string;
 
   @Expose()
   type: NotificationType;

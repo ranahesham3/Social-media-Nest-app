@@ -1,4 +1,4 @@
-import { ReactionType } from 'src/_cors/types/ReactionType';
+import { ReactionType } from 'src/_cores/types/ReactionType';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { User } from 'src/user/entities/user.entity';

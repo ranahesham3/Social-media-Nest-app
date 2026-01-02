@@ -50,20 +50,20 @@ export class CommentService {
     });
 
     this.commentGateway.handleNewComment(responseComment);
+
+    return {
+      message: 'Comment created successfully!',
+    };
   }
 
   async getComments(postId: number) {
-    const post = await this.postService.findOne(postId);
+    await this.postService.findOne(postId);
     const comments = await this.commentRepository.find({
       where: { post: { id: postId } },
       relations: ['replies', 'parentComment'],
     });
     return comments.filter((comment) => comment.parentComment == null);
   }
-
-  // findAll() {
-  //   return `This action returns all comment`;
-  // }
 
   async findOne(id: number) {
     const comment = await this.commentRepository.findOneBy({ id });
@@ -81,6 +81,10 @@ export class CommentService {
       comment.content,
       comment.updatedAt,
     );
+
+    return {
+      message: 'Comment updated successfully!',
+    };
   }
 
   async remove(id: number) {

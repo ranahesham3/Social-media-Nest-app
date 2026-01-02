@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, Min } from 'class-validator';
-import { ReactionType } from 'src/_cors/types/ReactionType';
+import { ReactionType } from 'src/_cores/types/ReactionType';
 
 export class CreateReactionDto {
   @IsNumber()

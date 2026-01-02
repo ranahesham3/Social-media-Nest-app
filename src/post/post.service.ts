@@ -9,9 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { In, LessThan, Or, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
-import { UploadMediaDto } from '../_cors/dtos/upload-media.dto';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { MediaType } from 'src/_cors/types/MediaType';
+import { UploadMediaDto } from '../_cores/dtos/upload-media.dto';
+import { MediaType } from 'src/_cores/types/MediaType';
 import { DeleteMediaDto } from './dto/delete-media.dto';
 import { AddReactionDto } from './dto/add-reaction.dto';
 import { ReactionService } from 'src/reaction/reaction.service';
@@ -20,8 +19,8 @@ import { PostGateway } from './post.gateway';
 import { ResponsePostDto } from './dto/response-post.dto';
 import { plainToInstance } from 'class-transformer';
 import { NotificationService } from 'src/notification/notification.service';
-import { NotificationType } from 'src/_cors/types/NotificationType';
-import { PrivacyType } from 'src/_cors/types/PrivacyType';
+import { NotificationType } from 'src/_cores/types/NotificationType';
+import { PrivacyType } from 'src/_cores/types/PrivacyType';
 import { FriendService } from 'src/friend/friend.service';
 
 @Injectable()
@@ -52,6 +51,10 @@ export class PostService {
     });
 
     this.postGateway.handleNewPost(responsePost);
+
+    return {
+      message: 'Post created successfully!',
+    };
   }
 
   async findAll(
@@ -86,9 +89,9 @@ export class PostService {
       ],
       order: { createdAt: 'DESC' },
       skip,
-      take: limit,
+      take: limit + 1,
     });
-    const postsWithReaction = Promise.all(
+    const postsWithReaction = await Promise.all(
       posts.map(async (post) => {
         const currentReaction = await this.reactionService.findExisting(
           post.id,
@@ -98,7 +101,17 @@ export class PostService {
         return { ...post, myReaction: currentReaction?.type };
       }),
     );
-    return postsWithReaction;
+
+    const hasNextPage = postsWithReaction.length > limit;
+    const items = hasNextPage
+      ? postsWithReaction.slice(0, limit)
+      : postsWithReaction;
+
+    return {
+      items,
+      hasNextPage,
+      pageNumber,
+    };
   }
 
   async findOne(id: number) {
@@ -143,6 +156,10 @@ export class PostService {
       privacy: post.privacy,
     };
     this.postGateway.handleUpdatedPost(post.id, response);
+
+    return {
+      message: 'Post updated successfully!',
+    };
   }
 
   async remove(id: number) {
@@ -175,6 +192,10 @@ export class PostService {
 
     await this.postRepository.save(post);
     this.postGateway.handleDeletedMedia(post.id, deleteMediaDto);
+
+    return {
+      message: 'Media uploaded successfully!',
+    };
   }
 
   //--------------------------------Reaction-------------------------------------
@@ -232,6 +253,10 @@ export class PostService {
       notificationContent,
       post.id,
     );
+
+    return {
+      message: 'Reaction added successfully!',
+    };
   }
 
   async removeReaction(id: number, userId: number) {
@@ -255,5 +280,9 @@ export class PostService {
     });
 
     this.postGateway.handleAddReaction(responsePost);
+
+    return {
+      message: 'Reaction removed successfully!',
+    };
   }
 }

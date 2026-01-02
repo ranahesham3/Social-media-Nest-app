@@ -23,20 +23,27 @@ export class TransformDTOInterceptor<T> implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        const transformed = classTransformer.instanceToInstance(data);
+        if (data && Object.prototype.hasOwnProperty.call(data, 'hasNextPage')) {
+          const { items, hasNextPage, pageNumber } = data;
+          return {
+            message: 'success',
+            data: classTransformer.plainToInstance(this.classDTO, items, {
+              excludeExtraneousValues: true,
+              enableImplicitConversion: true,
+            }),
+            hasNextPage,
+            pageNumber,
+          };
+        }
 
-        const dto = classTransformer.plainToInstance(
-          this.classDTO,
-          transformed,
-          {
-            excludeExtraneousValues: true,
-            enableImplicitConversion: true,
-          },
-        );
+        const transformed = classTransformer.instanceToInstance(data);
 
         return {
           message: 'success',
-          data: dto,
+          data: classTransformer.plainToInstance(this.classDTO, transformed, {
+            excludeExtraneousValues: true,
+            enableImplicitConversion: true,
+          }),
         };
       }),
     );

@@ -1,4 +1,4 @@
-import { NotificationType } from 'src/_cors/types/NotificationType';
+import { NotificationType } from 'src/_cores/types/NotificationType';
 import { User } from 'src/user/entities/user.entity';
 import {
   BaseEntity,

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseCloudinaryDto } from './dto/response-cloudinary.dto';
 
 @TransformDTO(ResponseCloudinaryDto)

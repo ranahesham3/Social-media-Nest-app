@@ -12,12 +12,12 @@ import {
 import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
 import { CreatePrivateConversationDto } from './dto/create-private-conversation.dto';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
 import { CreateGroupConversationDto } from './dto/create-group-conversation.dto';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseConversationDto } from './dto/response-conversation.dto';
 import { AddParticipantsDto } from './dto/add-participants.dto';
 import { RemoveParticipantsDto } from './dto/remove-participants.dto';

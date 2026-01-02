@@ -13,15 +13,15 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
 import { ResponseUserDto } from './dto/response-user.dto';
-import { Roles } from 'src/_cors/decorators/role.decorator';
-import { UserType } from 'src/_cors/types/userType';
-import { RoleGuard } from 'src/_cors/guards/role.guard';
-import { UploadMediaDto } from 'src/_cors/dtos/upload-media.dto';
+import { Roles } from 'src/_cores/decorators/role.decorator';
+import { UserType } from 'src/_cores/types/userType';
+import { RoleGuard } from 'src/_cores/guards/role.guard';
+import { UploadMediaDto } from 'src/_cores/dtos/upload-media.dto';
 
 @Controller('users')
 export class UserController {
@@ -59,11 +59,12 @@ export class UserController {
   @TransformDTO(ResponseUserDto)
   async getAllUser(
     @CurrentUser() user: JwtType,
-    @Query('q') q: string,
+    @Query('cursor') cursor: string,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
-    @Query('cursor', new DefaultValuePipe(1), ParseIntPipe) cursor: number,
+    @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
+    pageNumber: number,
   ) {
-    return await this.userService.findAll(user.id, q, limit, cursor);
+    return await this.userService.findAll(user.id, cursor, limit, pageNumber);
   }
 
   @Roles(UserType.NORMAL_USER, UserType.ADMIN)

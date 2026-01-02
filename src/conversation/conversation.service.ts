@@ -4,7 +4,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Conversation } from './entities/conversation.entity';
@@ -13,7 +12,6 @@ import { CreatePrivateConversationDto } from './dto/create-private-conversation.
 import { UserService } from 'src/user/user.service';
 import { CreateGroupConversationDto } from './dto/create-group-conversation.dto';
 import { Message } from 'src/message/entities/message.entity';
-import { NotFoundError } from 'rxjs';
 import { AddParticipantsDto } from './dto/add-participants.dto';
 import { User } from 'src/user/entities/user.entity';
 import { RemoveParticipantsDto } from './dto/remove-participants.dto';

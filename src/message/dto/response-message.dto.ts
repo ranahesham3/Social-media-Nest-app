@@ -1,8 +1,7 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsBoolean, IsString, Length } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
 import { Message } from '../entities/message.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export class SeenByDto {
   @Expose()
@@ -12,8 +11,8 @@ export class SeenByDto {
   name?: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  avatar?: MediaType;
+  @Transform(({ obj }: { obj: User }) => obj.avatar?.url)
+  avatar?: string;
 }
 
 export class ResponseMessageDto {
@@ -33,9 +32,8 @@ export class ResponseMessageDto {
   senderName: string;
 
   @Expose()
-  @Transform(({ obj }: { obj: Message }) => obj.sender?.avatar)
-  @Type(() => MediaTypeDto)
-  senderAvatar?: MediaType;
+  @Transform(({ obj }: { obj: Message }) => obj.sender?.avatar?.url)
+  senderAvatar?: string;
 
   @Expose()
   @IsString()
@@ -43,8 +41,8 @@ export class ResponseMessageDto {
   text: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  mediaFile?: MediaType;
+  @Transform(({ obj }: { obj: Message }) => obj.mediaFile?.url)
+  mediaFile?: string;
 
   @Expose()
   @IsBoolean()

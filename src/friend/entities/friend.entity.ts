@@ -1,4 +1,4 @@
-import { FriendRequestStatus } from 'src/_cors/types/FriendReqStatus';
+import { FriendRequestStatus } from 'src/_cores/types/FriendReqStatus';
 import { User } from 'src/user/entities/user.entity';
 import {
   BaseEntity,

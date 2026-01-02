@@ -9,7 +9,6 @@ import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
 import { SendMessageDto } from './dto/send-message.dto';
 import { UserService } from 'src/user/user.service';
-import { Conversation } from 'src/conversation/entities/conversation.entity';
 import { ConversationService } from 'src/conversation/conversation.service';
 import { MessageGateway } from './message.gateway';
 import { plainToInstance } from 'class-transformer';
@@ -59,13 +58,17 @@ export class MessageService {
       conversationId.toString(),
       responseMessage,
     );
+
+    return {
+      message: 'Message sent successfully!',
+    };
   }
 
   async getAllMessages(
     conversationId: number,
     userId: number,
     limit: number,
-    cursor: number,
+    pageNumber: number,
   ) {
     const conversation = await this.conversationService.findOne(
       conversationId,
@@ -74,10 +77,17 @@ export class MessageService {
     const messages = await this.messageReposirory.find({
       where: { conversation: { id: conversation.id }, isDeleted: false },
       order: { createdAt: 'DESC' },
-      skip: limit * (cursor - 1),
-      take: limit,
+      skip: limit * (pageNumber - 1),
+      take: limit + 1,
     });
-    return messages;
+    const hasNextPage = messages.length > limit;
+    const items = hasNextPage ? messages.slice(0, limit) : messages;
+
+    return {
+      items,
+      hasNextPage,
+      pageNumber,
+    };
   }
 
   async findOne(id: number) {
@@ -149,9 +159,15 @@ export class MessageService {
         {
           id: user.id,
           name: user.name,
-          avatar: user.avatar,
+          avatar: user.avatar?.url,
         },
       );
+      return {
+        message: 'Message marked as seen',
+      };
     }
+    return {
+      message: 'Message already marked as seen',
+    };
   }
 }

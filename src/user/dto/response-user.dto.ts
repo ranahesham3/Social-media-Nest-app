@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -9,9 +9,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
-import { UserType } from 'src/_cors/types/userType';
+import { UserType } from 'src/_cores/types/userType';
+import { User } from '../entities/user.entity';
 
 export class ResponseUserDto {
   @Expose()
@@ -43,12 +42,12 @@ export class ResponseUserDto {
   phoneNumber?: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  avatar?: MediaType;
+  @Transform(({ obj }: { obj: User }) => obj.avatar?.url)
+  avatar?: string;
 
   @Expose()
-  @Type(() => MediaTypeDto)
-  coverPhoto?: MediaType;
+  @Transform(({ obj }: { obj: User }) => obj.coverPhoto?.url)
+  coverPhoto?: string;
 
   @Expose()
   @IsBoolean()

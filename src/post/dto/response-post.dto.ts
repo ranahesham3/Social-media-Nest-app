@@ -1,9 +1,9 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { PrivacyType } from 'src/_cors/types/PrivacyType';
+import { PrivacyType } from 'src/_cores/types/PrivacyType';
 import { Post } from '../entities/post.entity';
-import { MediaType } from 'src/_cors/types/MediaType';
-import { ReactionType } from 'src/_cors/types/ReactionType';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
+import { MediaType } from 'src/_cores/types/MediaType';
+import { ReactionType } from 'src/_cores/types/ReactionType';
+import { MediaTypeDto } from 'src/_cores/dtos/media-type.dto';
 
 export class ResponsePostDto {
   @Expose()

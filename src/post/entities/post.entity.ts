@@ -1,5 +1,5 @@
-import { MediaType } from 'src/_cors/types/MediaType';
-import { PrivacyType } from 'src/_cors/types/PrivacyType';
+import { MediaType } from 'src/_cores/types/MediaType';
+import { PrivacyType } from 'src/_cores/types/PrivacyType';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Reaction } from 'src/reaction/entities/reaction.entity';
 import { User } from 'src/user/entities/user.entity';

@@ -9,7 +9,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { UploadMediaDto } from 'src/_cors/dtos/upload-media.dto';
+import { UploadMediaDto } from 'src/_cores/dtos/upload-media.dto';
 import { FriendService } from 'src/friend/friend.service';
 
 @Injectable()
@@ -28,9 +28,9 @@ export class UserService {
 
   async findAll(
     currentUserId: number,
-    q: string,
+    cursor: string,
     limit: number,
-    cursor: number,
+    pageNumber: number,
   ) {
     const userFriends =
       await this.friendService.getCurrentFriends(currentUserId);
@@ -40,16 +40,27 @@ export class UserService {
       .createQueryBuilder('user')
       .where('user.isActive=true')
       .orderBy('user.name', 'ASC');
-    if (q) {
-      db.andWhere(`user.name ILIKE :q OR user.email ILIKE :q`, { q: `%${q}%` });
+    if (cursor) {
+      db.andWhere(`user.name ILIKE :cursor OR user.email ILIKE :cursor`, {
+        cursor: `%${cursor}%`,
+      });
     }
-    db.skip((cursor - 1) * limit).take(limit);
+    db.skip((pageNumber - 1) * limit).take(limit + 1);
     const users = await db.getMany();
 
-    return users.map((u) => ({
+    const usersResponse = users.map((u) => ({
       ...u,
       isFriend: userFriendIds.includes(u.id),
     }));
+
+    const hasNextPage = usersResponse.length > limit;
+    const items = hasNextPage ? usersResponse.slice(0, limit) : usersResponse;
+
+    return {
+      items,
+      hasNextPage,
+      pageNumber,
+    };
   }
 
   async findByIds(userIds: number[]) {

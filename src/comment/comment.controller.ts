@@ -13,14 +13,14 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseCommentDto } from './dto/response-comment.dto';
-import { RoleGuard } from 'src/_cors/guards/role.guard';
-import { Roles } from 'src/_cors/decorators/role.decorator';
-import { UserType } from 'src/_cors/types/userType';
+import { RoleGuard } from 'src/_cores/guards/role.guard';
+import { Roles } from 'src/_cores/decorators/role.decorator';
+import { UserType } from 'src/_cores/types/userType';
 
 @Controller('comments')
 export class CommentController {
@@ -42,11 +42,6 @@ export class CommentController {
   findAll(@Param('postId', ParseIntPipe) postId: number) {
     return this.commentService.getComments(postId);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.commentService.findOne(+id);
-  // }
 
   @Patch(':id')
   @UseGuards(RoleGuard)

@@ -1,4 +1,4 @@
-import { MediaType } from 'src/_cors/types/MediaType';
+import { MediaType } from 'src/_cores/types/MediaType';
 import { Conversation } from 'src/conversation/entities/conversation.entity';
 import { User } from 'src/user/entities/user.entity';
 import {

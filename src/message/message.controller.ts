@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
 import { SendMessageDto } from './dto/send-message.dto';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseMessageDto } from './dto/response-message.dto';
 
 @Controller('messages')
@@ -45,13 +45,14 @@ export class MessageController {
     @Param('conversationId', ParseIntPipe) conversationId: number,
     @CurrentUser() payload: JwtType,
     @Query('limit', new DefaultValuePipe(50), ParseIntPipe) limit: number,
-    @Query('cursor', new DefaultValuePipe(1), ParseIntPipe) cursor: number,
+    @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
+    pageNumber: number,
   ) {
     return await this.messageService.getAllMessages(
       conversationId,
       payload.id,
       limit,
-      cursor,
+      pageNumber,
     );
   }
 

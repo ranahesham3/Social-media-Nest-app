@@ -8,8 +8,8 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
+import { MediaTypeDto } from 'src/_cores/dtos/media-type.dto';
+import { MediaType } from 'src/_cores/types/MediaType';
 
 export class UpdateConversationDto {
   @IsOptional()

@@ -9,10 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
-import { AuthGuard } from 'src/_cors/guards/auth.guard';
-import { CurrentUser } from 'src/_cors/decorators/current-user.decorator';
-import type { JwtType } from 'src/_cors/types/JwtType';
-import { TransformDTO } from 'src/_cors/interceptors/transform-dto.interceptor';
+import { AuthGuard } from 'src/_cores/guards/auth.guard';
+import { CurrentUser } from 'src/_cores/decorators/current-user.decorator';
+import type { JwtType } from 'src/_cores/types/JwtType';
+import { TransformDTO } from 'src/_cores/interceptors/transform-dto.interceptor';
 import { ResponseNotificationDto } from './dto/response-notification.dto';
 
 @Controller('notifications')

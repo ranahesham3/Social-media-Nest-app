@@ -1,7 +1,5 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
-import { MediaTypeDto } from 'src/_cors/dtos/media-type.dto';
-import { MediaType } from 'src/_cors/types/MediaType';
 import { FriendRequest } from '../entities/friend.entity';
 
 export class ResponseFriendRequestDto {
@@ -25,12 +23,10 @@ export class ResponseFriendRequestDto {
   senderEmail: string;
 
   @Expose()
-  @Transform(({ obj }: { obj: FriendRequest }) => obj.sender.avatar)
-  @Type(() => MediaTypeDto)
-  senderAvatar?: MediaType;
+  @Transform(({ obj }: { obj: FriendRequest }) => obj.sender.avatar?.url)
+  senderAvatar?: string;
 
   @Expose()
-  @Transform(({ obj }: { obj: FriendRequest }) => obj.sender.coverPhoto)
-  @Type(() => MediaTypeDto)
-  senderCoverPhoto?: MediaType;
+  @Transform(({ obj }: { obj: FriendRequest }) => obj.sender.coverPhoto?.url)
+  senderCoverPhoto?: string;
 }

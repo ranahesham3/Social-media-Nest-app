@@ -8,15 +8,6 @@ export class ResponseCloudinaryDto {
   @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.public_id)
   public_id: string;
   @Expose()
-  @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.version)
-  version: number;
-  @Expose()
-  @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.display_name)
-  name: string;
-  @Expose()
-  @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.format)
-  format: string;
-  @Expose()
-  @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.resource_type)
-  resource_type: string;
+  @Transform(({ obj }: { obj: CloudinaryResponse }) => obj.url)
+  url: string;
 }

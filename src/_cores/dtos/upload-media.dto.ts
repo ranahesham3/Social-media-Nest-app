@@ -6,14 +6,5 @@ export class UploadMediaDto {
   public_id: string;
   @IsNumber()
   @IsNotEmpty()
-  version: number;
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-  @IsString()
-  @IsNotEmpty()
-  format: string;
-  @IsString()
-  @IsNotEmpty()
-  resource_type: string;
+  url: string;
 }
